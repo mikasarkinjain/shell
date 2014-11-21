@@ -18,17 +18,12 @@ main(){
     i = 0;
     while(l[i]){
      char p = l[i];
-     char currentOutput[1000];
-     char firstPipe = 1;
+     char currentOutput[1000] = {0};
+     currentOuput = execute(SUBSTRING(p, strchr(p, "|")));
      while(strchr(p, "|")){
-      if (firstPipe){
-       currentOutput = execute(SUBSTRING(p, strchr(p, "|")-1));
-       firstPipe = 1;
+      currentOutput = pipe(currentOutput, SUBSTRING(strchr(p, "|")+1, strchr(strchr(p, "|"), "|")));
+      p = strchr(p, "|");
       }
-      else {
-       pipe(currentOutput, _______________)
-      }
-      p = strchr(p, ">");
+    printf("%s\n", currentOutput);
     }
-  }
 }
