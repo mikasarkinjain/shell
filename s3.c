@@ -73,3 +73,6 @@ main(){
     printf("%s\n", currentOutput);
     }
 }
+
+
+have not tested
