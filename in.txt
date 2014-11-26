@@ -1,0 +1,6 @@
+a.out
+in.txt
+s2.c
+s3.c
+s4.c
+s.c
