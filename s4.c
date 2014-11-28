@@ -1,6 +1,5 @@
 /*
  * todo:
- * wait for child process
  * handle extra spaces for exec ("ls " breaks)
  * extend execute so it doesn't rely on space separation
  * actually get program running
@@ -31,14 +30,11 @@ char **split(char *s, char delim){
 	return sep;
 }
 
-char execute(char* r, int in, int out){
+int execute(char* r, int in, int out){
 	int f = fork();
 	if (f == 0){
-                printf("in: %d\nout: %d\n", in, out);
 		dup2(in, STDIN_FILENO);
 		dup2(out, STDOUT_FILENO);
-                close(out);
-                printf("after dup2\n");
 		int n = count_tokens(r, ' '), lend = 0;
 		char **c = split(r, ' ');
 		char *reduced[1000];
@@ -78,12 +74,11 @@ char execute(char* r, int in, int out){
 			i += 2;
 		}
 		if(lend){
-                        printf("Above exec\n");
 			execvp(reduced[0], reduced);
 			printf("Unknown Command\n");
-			return 1;
 		}
 	}
+        return f;
 }
 
 main(){
@@ -106,21 +101,28 @@ main(){
 			while (lpipe[j]) {
 				if(j%2 == 0){
 					fdin = open(".f1", O_RDONLY);
-					fdout = open(".f2", O_CREAT | O_TRUNC, 0777);
+					fdout = open(".f2", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 				}
 				else {
 					fdin = open(".f2", O_RDONLY);
-					fdout = open(".f1", O_CREAT | O_TRUNC, 0777);
+					fdout = open(".f1", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 				}
 				if(j == 0)
 					fdin = 0;
 				if(j == npipes)
 					fdout = 1;
-				execute(lpipe[j], fdin, fdout);
+				int childpid = execute(lpipe[j], fdin, fdout);
                                 if (j != 0)
                                     close(fdin);
-                                if (j != npipes)
+                                if (j != npipes) {
                                     close(fdout);
+                                }
+
+                                /* wait for child process before continuing */
+                                if (j == npipes) {
+                                        int returnStatus;
+                                        waitpid(childpid, &returnStatus, 0);
+                                }
 				j++;
 			}
 			i++;
