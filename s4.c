@@ -75,7 +75,7 @@ static void handle_argument(int argument_number, char **lpipe, int npipes) {
         }
 
         // wait for child process before continuing if it's the last command
-        if (argument_number == npipes) {
+        if (argument_number == npipes && childpid != -1) {
                 int returnStatus;
                 waitpid(childpid, &returnStatus, 0);
         }
@@ -94,7 +94,7 @@ static int handle_pipes(char **command_chain) {
                 if (!strcmp("exit", command_chain[i])) {
                     return -1;
                 }
-                // "cd" case
+                // "cd" case is handled in executor because we must split on spaces first
                 npipes = count_tokens(command_chain[i], '|') - 1;
                 lpipe = split(command_chain[i], '|');
                 arg_number = 0;

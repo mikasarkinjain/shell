@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <wait.h>
+#include <errno.h>
 
 #include "s4.h"
 
@@ -17,6 +18,13 @@ int execute(char* r, int in, int out){
 		char *reduced[1000];
 		int i=0, fd;
 		while(i<n){
+                        // "cd" case
+                        if (!strcmp("cd", c[i])) {
+                                // handle the error
+                                if (chdir(c[i+1]) == -1)
+                                    printf("%s\n", strerror(errno));
+                                return -1;
+                        }
 			if(!strcmp(">", c[i])){
 				fd = open(c[i+1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
 				dup2(fd, STDOUT_FILENO);
