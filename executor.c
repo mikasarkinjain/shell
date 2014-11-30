@@ -61,6 +61,7 @@ int execute(char* r, int in, int out){
 		if(lend){
 			execvp(reduced[0], reduced);
 			printf("Unknown Command\n");
+                        exit(0);
 		}
 	}
         return f;

@@ -92,7 +92,7 @@ static int handle_pipes(char **command_chain) {
         while (command_chain[i]) {
                 // "exit" case
                 if (!strcmp("exit", command_chain[i])) {
-                    return -1;
+                    exit(0);
                 }
                 // "cd" case is handled in executor because we must split on spaces first
                 npipes = count_tokens(command_chain[i], '|') - 1;
@@ -112,17 +112,14 @@ static int handle_pipes(char **command_chain) {
  * and splits on semicolons ';'
  */
 static void run() {
-	char buf[1000], **l;
 	while(1){
+                char buf[1000], **l;
 		printf("> ");
 		fgets(buf, sizeof buf, stdin);
 		*strchr(buf, '\n') = 0;
 
 		l = split(buf, ';');
                 int sig = handle_pipes(l);
-                if (sig == -1) {
-                    break;
-                }
 	}
 }
 
