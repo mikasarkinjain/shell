@@ -86,11 +86,14 @@ static void handle_argument(int argument_number, char **lpipe, int npipes) {
  *
  * splits on pipes, passes each argument in the pipe to handle_argument for interpretation
  */
-static void handle_pipes(char **command_chain) {
+static int handle_pipes(char **command_chain) {
         int i, arg_number, npipes;
         char **lpipe;
         while (command_chain[i]) {
                 // "exit" case
+                if (!strcmp("exit", command_chain[i])) {
+                    return -1;
+                }
                 // "cd" case
                 npipes = count_tokens(command_chain[i], '|') - 1;
                 lpipe = split(command_chain[i], '|');
@@ -101,6 +104,7 @@ static void handle_pipes(char **command_chain) {
                 }
                 i++;
         }
+        return 1;
 }
 
 /*
@@ -115,7 +119,10 @@ static void run() {
 		*strchr(buf, '\n') = 0;
 
 		l = split(buf, ';');
-                handle_pipes(l);
+                int sig = handle_pipes(l);
+                if (sig == -1) {
+                    break;
+                }
 	}
 }
 
