@@ -23,6 +23,33 @@ char ** cleanUp(char ** l, int tokenNum){
 
 }
 
+char * cleanUpString(char * s){
+	printf("s --%s--\n", s);
+	char ret[1000] = {0};
+	int i;
+	int j = 0;
+	for (i = 0; s[i]; i++){
+		while (s[i]  == ' ' && s[i+1] == ' '){
+			i++;
+		}
+		if (s[0] == ' ' && j == 0) i++;
+		if (s[i] == '>' && ret[j-1] != ' ' && ret[j-1] != '2' && ret[j-1] != '>' || s[i] == '2' && s[i+1] == '>' && ret[j-1] != ' ' && ret[j-1] != '>'){
+			ret[j] = ' ';
+			j++;
+		}
+		if (s[i] != ' ' && s[i] != '>' && ret[j-1] == '>'){
+			ret[j] = ' ';
+			j++;
+		}
+		ret[j] = s[i];
+		j++;
+	}
+	if (ret[j-1] == ' ') ret[j-1] = 0;
+	printf("ret --%s--\n", ret);
+	return ret;
+
+}
+
 
 /* int execute()
 Inputs: char *r - command to be executed, ex. ls -l, cat > out.txt
