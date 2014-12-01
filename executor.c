@@ -8,6 +8,22 @@
 
 #include "s4.h"
 
+
+char ** cleanUp(char ** l, int tokenNum){
+	char **ret[1000] = {0};
+	int i;
+	int j = 0;
+	for (i = 0; i < tokenNum; i++){
+		if (l[i][0]){
+			ret[j] = l[i];
+			j++;
+		}
+	}
+	return ret;
+
+}
+
+
 /* int execute()
 Inputs: char *r - command to be executed, ex. ls -l, cat > out.txt
         int in - file descriptor with input value
@@ -22,17 +38,21 @@ int execute(char* r, int in, int out){
 	if (f == 0){
 		dup2(in, STDIN_FILENO);
 		dup2(out, STDOUT_FILENO);
+		
 		int n = count_tokens(r, ' '), lend = 0;
 		char **c = split(r, ' ');
-		char *reduced[1000];
+		//c = cleanUp(c, n);
+
+		char *reduced[1000] = {0};
+		
 		int i=0, fd;
 		while(i<n){
-                        // "cd" case
-                        if (!strcmp("cd", c[i])) {
-                                // handle the error
-                                if (chdir(c[i+1]) == -1)
-                                    printf("%s\n", strerror(errno));
-                                return -1;
+            // "cd" case
+            if (!strcmp("cd", c[i])) {
+                // handle the error
+                if (chdir(c[i+1]) == -1)
+                	printf("%s\n", strerror(errno));
+                return -1;
                         }
 			if(!strcmp(">", c[i])){
 				fd = open(c[i+1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
@@ -68,6 +88,10 @@ int execute(char* r, int in, int out){
 			i += 2;
 		}
 		if(lend){
+			printf("red[0]:%s\n", reduced[0]);
+			printf("red[1]:%s\n", reduced[1]);
+			printf("red[2]:%s\n", reduced[2]);
+			printf("red[3]:%s\n", reduced[3]);
 			execvp(reduced[0], reduced);
 			printf("Unknown Command\n");
                         exit(0);
