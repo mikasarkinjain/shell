@@ -8,6 +8,15 @@
 
 #include "s4.h"
 
+/* int execute()
+Inputs: char *r - command to be executed, ex. ls -l, cat > out.txt
+        int in - file descriptor with input value
+        int out - file descriptor to write output value to
+
+handles cd case
+handles >, >>, 2>, 2>>, &>, <
+
+executes the command and returns the childpid so that the main process can wait for the child process to finish */
 int execute(char* r, int in, int out){
 	int f = fork();
 	if (f == 0){

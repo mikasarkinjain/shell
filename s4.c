@@ -2,10 +2,10 @@
  * todo:
  * handle extra spaces for exec ("ls " breaks)
  * extend execute so it doesn't rely on space separation
- * actually get program running
  * print specific errors when they occur
  */
 
+/* Handles All Parsing Functions. Also contains int main() */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +15,14 @@
 
 #include "executor.h"
 
-/* counts number of tokens */
+/* int count_tokens() (Idea from dwshell in DESIGN_EXAMPLE.txt)
+Inputs: char *s - string to be parsed
+        char delim - character to separate on
+Returns: Number of tokens separated by delim + 1
+
+Counts number of times the character delim appears in the string line
+Number of tokens is 1 more than appearences of delim
+if delim is not in the string, returns 1 */
 int count_tokens(char *s, char delim){
 	int c = 1;
 	char *p = s-1;
@@ -24,6 +31,13 @@ int count_tokens(char *s, char delim){
 	return c;
 }
 
+/* char **split(char *s, char delim)
+Inputs: char *s - string to be parsed
+        char delim - character to separate on
+Returns: Array of Tokens separated by delim
+
+splits the string into tokens, separated by delim
+max size is 1000 * sizeof(char *) */
 char **split(char *s, char delim){
 	char d[2] = {delim, '\0'};
 	char **sep = malloc(sizeof(char*) * 1000);
@@ -34,13 +48,16 @@ char **split(char *s, char delim){
 }
 
 
-/*
- * int argument_number - the argument that the parser is on, each argument is separated by a '|'
- * char **lpipe - array of all of the arguments
- * int npipes - total number of pipes
- *
- * handles which file descriptor to write to and executes the argument
- */
+/* static void handle_argument()
+Inputs: int argument_number - the argument the parser is on, each argument is separated by a | for our case
+        char **lpipe - array of all the tokens, separated by |
+        int npipes - the total number of tokens, separated by |
+Returns: No return value
+
+handles the input/output of each token
+    sends the output of one command to a file, which the next command will use as input and so on (.f1, .f2 are the two files)
+reads lpipe[argument_number] and executes the token contained in that string using executor.c
+waits for child process to finish */
 static void handle_argument(int argument_number, char **lpipe, int npipes) {
         int fdin, fdout;
         /*
@@ -81,12 +98,13 @@ static void handle_argument(int argument_number, char **lpipe, int npipes) {
         }
 }
 
-/*
- * char *command_chain - string in between semicolons to be parsed
- *
- * splits on pipes, passes each argument in the pipe to handle_argument for interpretation
- */
-static int handle_pipes(char **command_chain) {
+/* static int handle_pipes()
+Inputs: char **command_chain - array of all commands, separated by semicolon ';'
+Returns: No return value
+
+handles the 'exit' case, in which case it ends all processes and exits gemshell
+splits on pipes "|" and enters a while loop, calling handle_argument for each token separated by pipe */
+static void handle_pipes(char **command_chain) {
         int i, arg_number, npipes;
         char **lpipe;
         while (command_chain[i]) {
@@ -104,22 +122,24 @@ static int handle_pipes(char **command_chain) {
                 }
                 i++;
         }
-        return 1;
 }
 
-/*
- * infinite while loop that constantly reads in commands from the user
- * and splits on semicolons ';'
- */
+
+/* static void run()
+Inputs: no Inputs
+Returns: No Return value
+
+uses fgets to read user input
+splits on semicolons and pass value to handle_argument() */
 static void run() {
 	while(1){
                 char buf[1000], **l;
-		printf("> ");
+		printf("gemshell> ");
 		fgets(buf, sizeof buf, stdin);
 		*strchr(buf, '\n') = 0;
 
 		l = split(buf, ';');
-                int sig = handle_pipes(l);
+                handle_pipes(l);
 	}
 }
 
