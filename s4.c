@@ -92,7 +92,7 @@ static void handle_argument(int argument_number, char **lpipe, int npipes) {
         }
 
         // wait for child process before continuing if it's the last command
-        if (argument_number == npipes && childpid != -1) {
+        if (childpid != -1) {
                 int returnStatus;
                 waitpid(childpid, &returnStatus, 0);
         }
