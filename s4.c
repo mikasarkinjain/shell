@@ -134,7 +134,7 @@ splits on semicolons and pass value to handle_argument() */
 static void run() {
 	while(1){
                 char buf[1000], **l;
-		printf("gemshell> ");
+		printf("> ");
 		fgets(buf, sizeof buf, stdin);
 		*strchr(buf, '\n') = 0;
 
