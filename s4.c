@@ -1,10 +1,3 @@
-/*
- * todo:
- * handle extra spaces for exec ("ls " breaks)
- * extend execute so it doesn't rely on space separation
- * print specific errors when they occur
- */
-
 /* Handles All Parsing Functions. Also contains int main() */
 #include <stdlib.h>
 #include <stdio.h>
