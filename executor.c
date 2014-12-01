@@ -9,6 +9,7 @@
 #include "s4.h"
 
 
+/*
 char ** cleanUp(char ** l, int tokenNum){
 	char **ret[1000] = {0};
 	int i;
@@ -21,10 +22,10 @@ char ** cleanUp(char ** l, int tokenNum){
 	}
 	return ret;
 
-}
+}*/
 
 char * cleanUpString(char * s){
-	printf("s --%s--\n", s);
+	//printf("s --%s--\n", s);
 	char ret[1000] = {0};
 	int i;
 	int j = 0;
@@ -46,7 +47,7 @@ char * cleanUpString(char * s){
 		j++;
 	}
 	if (ret[j-1] == ' ') ret[j-1] = 0;
-	printf("ret --%s--\n", ret);
+	//printf("ret --%s--\n", ret);
 	return ret;
 
 }
@@ -66,6 +67,9 @@ int execute(char* r, int in, int out){
 	if (f == 0){
 		dup2(in, STDIN_FILENO);
 		dup2(out, STDOUT_FILENO);
+                printf("--%s--\n", r);
+                r = cleanUpString(r);
+                printf("--%s--\n", r);
 
 		int n = count_tokens(r, ' '), lend = 0;
 		char **c = split(r, ' ');
