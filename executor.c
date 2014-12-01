@@ -11,9 +11,7 @@
 /* char *cleanUpString()
 Inputs: char *s - string that needs to be cleaned
 Returns: String with fixed spaces */
-char * cleanUpString(char * s){
-	//printf("s --%s--\n", s);
-	char ret[1000] = {0};
+char * cleanUpString(char * s, char *ret){
 	int i;
 	int j = 0;
 	for (i = 0; s[i]; i++){
@@ -34,9 +32,7 @@ char * cleanUpString(char * s){
 		j++;
 	}
 	if (ret[j-1] == ' ') ret[j-1] = 0;
-	//printf("ret --%s--\n", ret);
 	return ret;
-
 }
 
 
@@ -54,7 +50,8 @@ int execute(char* r, int in, int out){
 	if (f == 0){
 		dup2(in, STDIN_FILENO);
 		dup2(out, STDOUT_FILENO);
-                r = cleanUpString(r);
+                char clean[1000] = {0};
+                r = cleanUpString(r, clean);
 
 		int n = count_tokens(r, ' '), lend = 0;
 		char **c = split(r, ' ');
