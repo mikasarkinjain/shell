@@ -2,17 +2,16 @@ gemshell
 
 Features:
     Forks and executes commands
-    pipes and redirects!
+    Multiple piping and redirects!
         |, >, >>, 2>, &>, <
-    awesome name!
+    Precedence
+    Awesome name!
 
 Attempted:
     we did what we wanted :)
 
 Bugs:
-    pipes and redirects only work if you don't put a space - ex. ls|grep Desktop
     seg faults if user inserts a really, really, really long command
-    leaves .f1 and .f2 (inputs and outputs of each command) in the directory
     only the last command in a series of pipes/redirects will print to stdout
 
 Files and Function Headers:
