@@ -8,6 +8,9 @@
 
 #include "s4.h"
 
+/* char *cleanUpString()
+Inputs: char *s - string that needs to be cleaned
+Returns: String with fixed spaces */
 char * cleanUpString(char * s){
 	//printf("s --%s--\n", s);
 	char ret[1000] = {0};
