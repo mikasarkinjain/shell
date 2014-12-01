@@ -120,6 +120,8 @@ static void handle_pipes(char **command_chain) {
                         handle_argument(arg_number, lpipe, npipes);
                         arg_number++;
                 }
+                remove(".f1");
+                remove(".f2");
                 i++;
         }
 }
