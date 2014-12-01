@@ -33,7 +33,7 @@ char * cleanUpString(char * s){
 			i++;
 		}
 		if (s[0] == ' ' && j == 0) i++;
-		if (s[i] == '>' && ret[j-1] != ' ' && ret[j-1] != '2' && ret[j-1] != '>' || 
+		if (s[i] == '>' && ret[j-1] != ' ' && ret[j-1] != '2' && ret[j-1] != '>' ||
 		    s[i] == '2' && s[i+1] == '>' && ret[j-1] != ' ' && ret[j-1] != '>'){
 			ret[j] = ' ';
 			j++;
@@ -66,13 +66,13 @@ int execute(char* r, int in, int out){
 	if (f == 0){
 		dup2(in, STDIN_FILENO);
 		dup2(out, STDOUT_FILENO);
-		
+
 		int n = count_tokens(r, ' '), lend = 0;
 		char **c = split(r, ' ');
 		//c = cleanUp(c, n);
 
 		char *reduced[1000] = {0};
-		
+
 		int i=0, fd;
 		while(i<n){
             // "cd" case
@@ -116,10 +116,6 @@ int execute(char* r, int in, int out){
 			i += 2;
 		}
 		if(lend){
-			printf("red[0]:%s\n", reduced[0]);
-			printf("red[1]:%s\n", reduced[1]);
-			printf("red[2]:%s\n", reduced[2]);
-			printf("red[3]:%s\n", reduced[3]);
 			execvp(reduced[0], reduced);
 			printf("Unknown Command\n");
                         exit(0);
